@@ -21,6 +21,7 @@ import { ProductModelInit } from './product'
 import { QuantityModelInit } from './quantity'
 import { RecycleModelInit } from './recycle'
 import { relationsInit } from './relations'
+import { ReviewReportModelInit } from './reviewReport'
 import { SecurityAnswerModelInit } from './securityAnswer'
 import { SecurityQuestionModelInit } from './securityQuestion'
 import { UserModelInit } from './user'
@@ -61,6 +62,7 @@ function initModels (seq: Sequelize) {
   ProductModelInit(seq)
   QuantityModelInit(seq)
   RecycleModelInit(seq)
+  ReviewReportModelInit(seq)
   SecurityAnswerModelInit(seq)
   SecurityQuestionModelInit(seq)
   UserModelInit(seq)

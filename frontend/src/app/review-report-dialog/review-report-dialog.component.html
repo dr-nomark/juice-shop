@@ -1,0 +1,31 @@
+<!--
+  ~ Copyright (c) 2014-2026 Bjoern Kimminich & the OWASP Juice Shop contributors.
+  ~ SPDX-License-Identifier: MIT
+-->
+
+<h2 mat-dialog-title translate>LABEL_REPORT_REVIEW</h2>
+<mat-dialog-content>
+  <blockquote class="reported-review">
+    <cite>{{ data.review.author }}</cite>
+    <p>{{ data.review.message }}</p>
+  </blockquote>
+  <p id="reason-label" translate>LABEL_REPORT_REASON</p>
+  <mat-radio-group [formControl]="reasonControl" class="reason-group" aria-labelledby="reason-label">
+    @for (reason of reasons; track reason) {
+      <mat-radio-button [value]="reason" [id]="'reason-' + reason">
+        {{ ('REVIEW_REPORT_REASON_' + reason.toUpperCase()) | translate }}
+      </mat-radio-button>
+    }
+  </mat-radio-group>
+</mat-dialog-content>
+<mat-dialog-actions align="end">
+  <button mat-stroked-button mat-dialog-close aria-label="Cancel reporting the review">
+    <mat-icon>close</mat-icon>
+    <span>{{ 'BTN_CANCEL' | translate }}</span>
+  </button>
+  <button mat-raised-button color="warn" id="submitReviewReportButton" (click)="submit()"
+    [disabled]="reasonControl.invalid || submitting" aria-label="Submit the review report">
+    <mat-icon>flag</mat-icon>
+    <span>{{ 'BTN_REPORT' | translate }}</span>
+  </button>
+</mat-dialog-actions>
