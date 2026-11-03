@@ -58,6 +58,12 @@
                   <p>{{ review.message }}</p>
                 </div>
                 <div class="like-container">
+                  @if (isLoggedIn()) {
+                    <button mat-icon-button (click)="reportReview(review)" class="rw-button report-review-button"
+                      matTooltip="{{'LABEL_REPORT_REVIEW' | translate}}" aria-label="Report this review">
+                      <mat-icon>flag</mat-icon>
+                    </button>
+                  }
                   <button mat-icon-button (click)="likeReview(review)" [disabled]="review.liked || !isLoggedIn()"
                     class="rw-button" aria-label="Rate a helpful review">
                     <mat-icon>thumb_up</mat-icon>

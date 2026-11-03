@@ -117,6 +117,7 @@ import { createProductReviews } from './routes/createProductReviews'
 import { getWalletBalance, addWalletBalance } from './routes/wallet'
 import { retrieveAppConfiguration } from './routes/appConfiguration'
 import { updateProductReviews } from './routes/updateProductReviews'
+import * as reviewReports from './routes/reviewReports'
 import { servePrivacyPolicyProof } from './routes/privacyPolicyProof'
 import { profileImageUrlUpload } from './routes/profileImageUrlUpload'
 import { profileImageFileUpload } from './routes/profileImageFileUpload'
@@ -661,6 +662,11 @@ function configureApp (app: ReturnType<typeof express>, seq: typeof sequelize) {
   app.put('/rest/products/:id/reviews', utils.asyncHandler(createProductReviews()))
   app.patch('/rest/products/reviews', security.isAuthorized(), updateProductReviews())
   app.post('/rest/products/reviews', security.isAuthorized(), utils.asyncHandler(likeProductReviews()))
+
+  /* Review reporting and moderation */
+  app.post('/rest/review-reports', utils.asyncHandler(reviewReports.requireReviewReportUser()), utils.asyncHandler(reviewReports.createReviewReport()))
+  app.get('/rest/review-reports', utils.asyncHandler(reviewReports.requireReviewReportUser()), utils.asyncHandler(reviewReports.listReviewReports()))
+  app.patch('/rest/review-reports/:id', utils.asyncHandler(reviewReports.requireReviewReportUser()), reviewReports.requireReviewReportAdmin(), utils.asyncHandler(reviewReports.updateReviewReportStatus()))
 
   /* Chat API endpoint */
   app.post('/rest/chat', utils.asyncHandler(chat()))

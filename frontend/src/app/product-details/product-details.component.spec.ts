@@ -6,6 +6,7 @@
 import { provideZoneChangeDetection } from '@angular/core'
 import { TranslateModule } from '@ngx-translate/core'
 import { ProductReviewEditComponent } from '../product-review-edit/product-review-edit.component'
+import { ReviewReportDialogComponent } from '../review-report-dialog/review-report-dialog.component'
 import { By } from '@angular/platform-browser'
 import { MatDividerModule } from '@angular/material/divider'
 import { UserService } from '../Services/user.service'
@@ -167,6 +168,30 @@ describe('ProductDetailsComponent', () => {
         expect(vi.mocked(dialog.open).mock.calls.length).toBe(1)
         expect(vi.mocked(dialog.open).mock.calls[0][0]).toBe(ProductReviewEditComponent)
         expect(vi.mocked(dialog.open).mock.calls[0][1].data).toEqual({ reviewData: { id: '42', message: 'Great product!', author: 'horst@juice-sh.op' } })
+    })
+
+    it('should open the review report dialog for logged-in users', () => {
+        localStorage.setItem('token', 'token')
+        component.data = { productData: { id: 42 } as Product }
+        userService.whoAmI.mockReturnValue(of({ email: 'horst@juice-sh.op' }))
+        productReviewService.get.mockReturnValue(of([{ _id: 'abc123', message: 'Spam!', author: 'bender@juice-sh.op' }]))
+        component.ngOnInit()
+        fixture.detectChanges()
+        const buttonDe = fixture.debugElement.query(By.css('button.report-review-button'))
+        buttonDe.triggerEventHandler('click', null)
+        expect(vi.mocked(dialog.open).mock.calls[0][0]).toBe(ReviewReportDialogComponent)
+        expect(vi.mocked(dialog.open).mock.calls[0][1].data).toEqual({ review: { _id: 'abc123', message: 'Spam!', author: 'bender@juice-sh.op' } })
+        localStorage.removeItem('token')
+    })
+
+    it('should not offer reporting reviews to anonymous users', () => {
+        localStorage.removeItem('token')
+        component.data = { productData: { id: 42 } as Product }
+        userService.whoAmI.mockReturnValue(of({}))
+        productReviewService.get.mockReturnValue(of([{ _id: 'abc123', message: 'Spam!', author: 'bender@juice-sh.op' }]))
+        component.ngOnInit()
+        fixture.detectChanges()
+        expect(fixture.debugElement.query(By.css('button.report-review-button'))).toBeNull()
     })
 
     it('should refresh reviews of product after editing a review', () => {

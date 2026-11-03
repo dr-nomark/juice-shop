@@ -42,7 +42,9 @@ import { ReactiveFormsModule, FormsModule } from '@angular/forms'
 
 import { TranslateModule, provideTranslateService } from '@ngx-translate/core'
 import { provideTranslateHttpLoader } from '@ngx-translate/http-loader'
+import { ROUTES } from '@angular/router'
 import { Routing } from './app/app.routing'
+import { reviewReportRoutes } from './app/review-reports/review-reports.routes'
 import { BrowserModule, bootstrapApplication } from '@angular/platform-browser'
 import { PhotoWallService } from './app/Services/photo-wall.service'
 import { DeliveryService } from './app/Services/delivery.service'
@@ -81,6 +83,7 @@ if (environment.production) {
 bootstrapApplication(AppComponent, {
     providers: [
         provideZoneChangeDetection(),
+        { provide: ROUTES, useValue: reviewReportRoutes, multi: true },
         importProvidersFrom(BrowserModule, Routing, TranslateModule.forRoot(), CookieModule.forRoot(), ReactiveFormsModule, FileUploadModule, MatToolbarModule, MatIconModule, FormsModule, MatFormFieldModule, MatSelectModule, MatButtonModule, MatSidenavModule, MatRippleModule, MatTableModule, MatPaginatorModule, MatCardModule, MatInputModule, MatCheckboxModule, MatDialogModule, MatDividerModule, MatNativeDateModule, MatExpansionModule, MatProgressBarModule, MatTooltipModule, MatMenuModule, MatListModule, MatButtonToggleModule, LayoutModule, MatGridListModule, MatBadgeModule, MatRadioModule, MatSnackBarModule, MatSliderModule, MatTabsModule, MatSlideToggleModule, MatChipsModule, MatAutocompleteModule),
         {
             provide: HTTP_INTERCEPTORS,

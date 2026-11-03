@@ -1,0 +1,68 @@
+<!--
+  ~ Copyright (c) 2014-2026 Bjoern Kimminich & the OWASP Juice Shop contributors.
+  ~ SPDX-License-Identifier: MIT
+-->
+
+<mat-card appearance="outlined" class="mat-elevation-z6 mat-own-card">
+  <div class="mdc-card">
+    <h1 translate>TITLE_REVIEW_REPORTS</h1>
+    @if (reports.length === 0) {
+      <p class="noResultText" translate>EMPTY_REVIEW_REPORT_LIST</p>
+    } @else {
+      <mat-table [dataSource]="reports" class="review-report-table">
+        <ng-container matColumnDef="review">
+          <mat-header-cell *matHeaderCellDef translate>LABEL_REVIEW</mat-header-cell>
+          <mat-cell *matCellDef="let report" class="review-cell">
+            @if (report.review) {
+              <cite>{{ report.review.author }}</cite>
+              <span>{{ report.review.message }}</span>
+            } @else {
+              <em translate>REVIEW_NO_LONGER_AVAILABLE</em>
+            }
+          </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="reason">
+          <mat-header-cell *matHeaderCellDef translate>LABEL_REPORT_REASON</mat-header-cell>
+          <mat-cell *matCellDef="let report" class="reason-cell">{{ ('REVIEW_REPORT_REASON_' + report.reason.toUpperCase()) | translate }}</mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="reporter">
+          <mat-header-cell *matHeaderCellDef translate>LABEL_REPORTED_BY</mat-header-cell>
+          <mat-cell *matCellDef="let report" class="reporter-cell">{{ report.reporter?.email }}</mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="createdAt">
+          <mat-header-cell *matHeaderCellDef translate>LABEL_REPORTED_AT</mat-header-cell>
+          <mat-cell *matCellDef="let report">{{ report.createdAt | date:'short' }}</mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="status">
+          <mat-header-cell *matHeaderCellDef translate>LABEL_STATUS</mat-header-cell>
+          <mat-cell *matCellDef="let report" class="status-cell">
+            @if (isModerator) {
+              <mat-form-field appearance="outline" subscriptSizing="dynamic" class="status-field">
+                <mat-select [value]="report.status" (selectionChange)="changeStatus(report, $event.value)"
+                  [id]="'status-select-' + report.id" aria-label="Change the status of the review report">
+                  @for (status of statuses; track status) {
+                    <mat-option [value]="status">{{ ('REVIEW_REPORT_STATUS_' + status.toUpperCase()) | translate }}</mat-option>
+                  }
+                </mat-select>
+              </mat-form-field>
+            } @else {
+              <span class="status-label">{{ ('REVIEW_REPORT_STATUS_' + report.status.toUpperCase()) | translate }}</span>
+            }
+          </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="resolver">
+          <mat-header-cell *matHeaderCellDef translate>LABEL_RESOLVED_BY</mat-header-cell>
+          <mat-cell *matCellDef="let report" class="resolver-cell">{{ report.resolver?.email }}</mat-cell>
+        </ng-container>
+
+        <mat-header-row *matHeaderRowDef="columns"></mat-header-row>
+        <mat-row *matRowDef="let row; columns: columns;" class="review-report-row"></mat-row>
+      </mat-table>
+    }
+  </div>
+</mat-card>

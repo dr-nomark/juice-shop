@@ -4,6 +4,7 @@
  */
 
 import { ProductReviewEditComponent } from '../product-review-edit/product-review-edit.component'
+import { ReviewReportDialogComponent } from '../review-report-dialog/review-report-dialog.component'
 import { UserService } from '../Services/user.service'
 import { ProductReviewService } from '../Services/product-review.service'
 import { Component, type OnDestroy, type OnInit, inject, ChangeDetectionStrategy } from '@angular/core'
@@ -99,6 +100,16 @@ export class ProductDetailsComponent implements OnInit, OnDestroy {
       console.log('Liked ' + review._id)
     })
     setTimeout(() => (this.reviews$ = this.productReviewService.get(this.data.productData.id)), 200)
+  }
+
+  reportReview (review: Review) {
+    this.dialog.open(ReviewReportDialogComponent, {
+      width: '500px',
+      height: 'max-content',
+      data: {
+        review
+      }
+    })
   }
 
   isLoggedIn () {

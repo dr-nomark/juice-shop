@@ -14,6 +14,7 @@ import { PrivacyRequestModel } from './privacyRequests'
 import { ProductModel } from './product'
 import { QuantityModel } from './quantity'
 import { RecycleModel } from './recycle'
+import { ReviewReportModel } from './reviewReport'
 import { SecurityAnswerModel } from './securityAnswer'
 import { SecurityQuestionModel } from './securityQuestion'
 import { UserModel } from './user'
@@ -139,6 +140,23 @@ const relationsInit = (_sequelize: Sequelize) => {
     foreignKeyConstraint: true,
     foreignKey: {
       name: 'UserId'
+    }
+  })
+
+  ReviewReportModel.belongsTo(UserModel, {
+    as: 'Reporter',
+    constraints: true,
+    foreignKeyConstraint: true,
+    foreignKey: {
+      name: 'ReporterId'
+    }
+  })
+  ReviewReportModel.belongsTo(UserModel, {
+    as: 'Resolver',
+    constraints: true,
+    foreignKeyConstraint: true,
+    foreignKey: {
+      name: 'ResolverId'
     }
   })
 
