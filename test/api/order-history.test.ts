@@ -48,6 +48,17 @@ void describe('/rest/order-history', () => {
     assert.equal(res.body.data[1].products[0].total, 26.97)
   })
 
+  void it('GET own seeded order as demo user', async () => {
+    const { token } = await login(app, { email: 'demo', password: 'demo' })
+
+    const res = await request(app)
+      .get('/rest/order-history')
+      .set({ Authorization: 'Bearer ' + token, 'content-type': 'application/json' })
+
+    assert.equal(res.status, 200)
+    assert.equal(res.body.data.length, 1)
+  })
+
   void it('GET no orders of other users with vowel-swapped email', async () => {
     const email = 'odmen@' + config.get<string>('application.domain')
     await register(app, { email, password: 'kitten lesser pooch karate buffoon indoors' })
